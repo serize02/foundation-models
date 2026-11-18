@@ -1,0 +1,7 @@
+defaults:
+  - /models@model: normwear
+  - _self_
+
+dataset:
+  name: wesad_256_512_null_ecg
+  path: artifacts/datasets/wesad_256_512_null_ecg

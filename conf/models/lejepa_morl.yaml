@@ -1,0 +1,8 @@
+defaults:
+  - lejepa
+  - _self_
+
+name: lejepa_morl
+instance:
+  transforms:
+    wavelet: morl

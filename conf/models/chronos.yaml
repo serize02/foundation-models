@@ -1,0 +1,6 @@
+name: chronos
+instance:
+  _target_: fmlab.fms.chronos.chronos.Chronos
+  weights: amazon/chronos-t5-base
+  batch_size: 64
+  transforms: null

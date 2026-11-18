@@ -1,0 +1,16 @@
+# @package _global_
+defaults:
+  - _self_
+  - /etls@_global_: etl_wesad_256_512_null_ecg
+  - override /hydra/job_logging: disabled
+
+hydra:
+  run:
+    dir: .
+  output_subdir: null
+
+task: etl
+loader: ???
+root: ???
+parameters: ???
+output_dir: ???

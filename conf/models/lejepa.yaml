@@ -1,0 +1,12 @@
+name: lejepa
+instance:
+  _target_: fmlab.fms.lejepa.lejepa.LeJEPA
+  model_id: OK-AI/lejepa-vits16-pretrain-in1k
+  batch_size: 64
+  transforms:
+    _target_: fmlab.datatools.transforms.WaveletScalogram
+    fs: 256
+    wavelet: cmor1.5-1.0
+    min_frequency: 1
+    max_frequency: 65
+    num_frequencies: 100

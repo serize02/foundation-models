@@ -1,0 +1,9 @@
+loader:
+  _target_: fmlab.datatools.etls.wesad.WESAD_ETL
+root: data/WESAD
+parameters:
+  signal: ECG
+  fs: 256
+  window_size: 512
+  stride: null
+output_dir: artifacts/datasets/wesad_256_512_null_ecg

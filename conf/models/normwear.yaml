@@ -1,0 +1,6 @@
+name: normwear
+instance:
+  _target_: fmlab.fms.normwear.normwear.NormWear
+  weights: artifacts/model_weights/normwear_pretrain_ckpt.pth
+  batch_size: 64
+  transforms: null

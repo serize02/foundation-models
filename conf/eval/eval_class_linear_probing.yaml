@@ -1,0 +1,9 @@
+test:
+  name: linear_probing
+  instance:
+    _target_: fmlab.eval.classification.linear_probing.LinearProbingTest
+    leave_k_out:
+      _target_: fmlab.eval.classification.leave_k_out.LeaveKOut
+      k: 3
+      shuffle: false
+    scale_embeddings: true

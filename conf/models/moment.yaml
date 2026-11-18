@@ -1,0 +1,6 @@
+name: moment
+instance:
+  _target_: fmlab.fms.moment.moment.MOMENT
+  weights: AutonLab/MOMENT-1-large
+  batch_size: 64
+  transforms: null

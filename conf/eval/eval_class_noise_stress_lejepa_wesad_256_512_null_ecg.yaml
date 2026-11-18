@@ -1,0 +1,8 @@
+defaults:
+  - eval_class_noise_stress
+  - /models@model: lejepa
+  - _self_
+
+embeddings:
+  name: lejepa_wesad_256_512_null_ecg
+  path: artifacts/embeddings/${.name}

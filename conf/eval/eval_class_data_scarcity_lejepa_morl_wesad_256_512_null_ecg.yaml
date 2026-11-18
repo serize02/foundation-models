@@ -1,0 +1,7 @@
+defaults:
+  - eval_class_data_scarcity
+  - _self_
+
+embeddings:
+  name: lejepa_morl_wesad_256_512_null_ecg
+  path: artifacts/embeddings/${.name}

@@ -1,0 +1,17 @@
+# @package _global_
+defaults:
+  - _self_
+  - /embeds@_global_: ???
+  - override /hydra/job_logging: disabled
+
+hydra:
+  run:
+    dir: .
+  output_subdir: null
+
+task: embed
+model: ???
+dataset:
+  name: ???
+  path: ???
+output_dir: artifacts/embeddings/${model.name}_${dataset.name}

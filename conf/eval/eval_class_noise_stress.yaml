@@ -1,0 +1,13 @@
+test:
+  name: noise_stress
+  instance:
+    _target_: fmlab.eval.classification.noise_stress.NoiseStressTest
+    leave_k_out:
+      _target_: fmlab.eval.classification.leave_k_out.LeaveKOut
+      k: 3
+      shuffle: false
+    scale_embeddings: true
+    seeds: [1, 2, 3]
+    snr_levels_db: [0, 10, 20]
+dataset:
+  path: artifacts/datasets/wesad_256_512_null_ecg

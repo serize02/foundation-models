@@ -1,0 +1,19 @@
+# @package _global_
+defaults:
+  - _self_
+  - /eval@_global_: ???
+  - override /hydra/job_logging: disabled
+
+hydra:
+  run:
+    dir: .
+  output_subdir: null
+
+task: eval_class
+test:
+  name: ???
+  instance: ???
+embeddings:
+  name: ???
+  path: ???
+output_dir: inference/${test.name}_${embeddings.name}

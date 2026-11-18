@@ -1,0 +1,11 @@
+test:
+  name: data_scarcity
+  instance:
+    _target_: fmlab.eval.classification.data_scarcity.DataScarcityTest
+    leave_k_out:
+      _target_: fmlab.eval.classification.leave_k_out.LeaveKOut
+      k: 3
+      shuffle: false
+    scale_embeddings: true
+    seeds: [1, 2, 3]
+    label_fractions: [0.01, 0.05, 0.1, 0.25, 0.5, 1.0]

@@ -1,0 +1,8 @@
+name: tsjepa
+instance:
+  _target_: fmlab.fms.tsjepa.tsjepa.TSJEPA
+  weights: artifacts/model_weights/lr_1e-07_ema_momentum_0.998_mask_ratio_0.7_ratio_patches_10_encoder_128_2_1_predictor_128_2_1_epoch_5000.pt
+  batch_size: 64
+  transforms:
+    _target_: fmlab.datatools.transforms.TakeLast
+    length: 320
