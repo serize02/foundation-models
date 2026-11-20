@@ -2,19 +2,30 @@
 
 Foundation models learn general representations through pretraining on large datasets and adapt them to downstream tasks. The approach developed in natural language processing (NLP), with models such as LLaMA, BERT, and GPT, and is now being applied to time series for classification, anomaly detection, forescasting and trend analysis. However time series data hold information that can be represented across different modalities such as scalogram images, which open the possibility of computer vision models to be used as well. This research is centered on studying the potential of LeJEPA in comparison with generalist and domain specific time series foundation models when dealing with physiological signals, specifically in downstreams tasks related to cognitive state estimation. 
 
-> The hypothesis is that LeJEPA's performance highly depends on the downstream task's potential of being represented through the continuous wavelet transform. The CWT exposes a big amount of settings that can explore and we are aiming to do such exploration, although LeJEPA was not trained on first place with scalograms images.
+The **hypothesis** is that LeJEPA can extract representations useful for physiological classification from scalograms, even though it was not pretrained on them. Its performance depends on whether the CWT captures signal patterns relevant to the downstream task, and may vary with the choice of wavelet and other transformation settings.
+
+
+> **IMPORTANT:** This is an exploratory study intended to inform future work on LeJEPA models for time series. The image-based approach has limitations: e.g., a longer context window must be represented within the same fixed-size model input, which can make fine temporal patterns harder to distinguish.
 
 ## Introduction
 
-Despite the increasing use of wearable tracking devices, such as smartwatches, wristbands, chest-worn systems that make signal collection easier nowadays, cognitive activity related datasets are hard to label. They usually rely on questionaries, self reports, exposure to environmental conditions, perspective, or subjective criteria that is not generalizable to all subjects within the study. Also, transfer between participants remains difficult because physiological responses vary between individuals and they do not manifest the same at the cognitive level.  However, the corpora of publicly available datasets cover a long range of areas such as stress detection, engagement, concentration levels, sleep stages, academic performance, etc. These conditions motivate the use of representation learning methodologies.
+### Foundation models and LeJEPA
 
-<!-- TODO; find a connection -->
+Foundation models learn general representations through pretraining on large datasets and adapt them to downstream tasks. The approach developed in natural language processing (NLP), with models such as LLaMA, BERT, and GPT, and is now being applied to time series for classification, anomaly detection, forecasting and trend analysis.
 
-Foundation models with different architectures have been studied for physiological downstreams tasks through the use of clinical and wearable data. Several public available benchmarks recognize that generalist time series foundation models have a comparable performance with domain specific ones under certain settings and downstreams evaluations. Physiological signals are not an exception of this. Although, researchers have created models for specific type of signals only, like PPG, ECG or EDA, some of these models generalize poorly across datasets or are sensitive to changes in sampling frequency and input window length. Their performance can also degrade when applied to signals collected with different devices, which may vary in sensor placement, signal quality, and preprocessing. 
+[LeJEPA](https://arxiv.org/abs/2511.08544) is a self-supervised learning approach based on joint embedding predictive architectures. It learns representations by encouraging agreement between different views of the same input and uses Sketched Isotropic Gaussian Regularization (SIGReg) to prevent the representations from collapsing to a constant. This approach has shown competitive performance on image benchmarks, while the related [LeVJEPA](https://arxiv.org/abs/2608.27395) extends the objective to video. LeVJEPA is an inspiration for this research because both video and time-series data have a temporal dimension.
 
-[LeJEPA](https://arxiv.org/abs/2511.08544) is a self-supervised learning approach based on joint embedding predictive architectures. It learns representations by encouraging agreement between different views of the same input and uses Sketched Isotropic Gaussian Regularization (SIGReg) to prevent the representations from collapsing to a constant. This approach has shown competitive performance on image benchmarks, while the related [LeVJEPA](https://arxiv.org/abs/2608.27395) extends the objective to video. In this research, we use an [image-pretrained LeJEPA vision transformer](https://huggingface.co/OK-AI/lejepa-vits16-pretrain-in1k) and explore its application to physiological time series through the continuous wavelet transform.
+The CWT provides a bridge between the time series and visual domains by representing the signal as a scalogram, where changes over time and frequency can be observed in an image. The choice of wavelet, frequency range, and window length determines which signal dynamics are presented to the visual encoder. An [image-pretrained LeJEPA vision transformer](https://huggingface.co/OK-AI/lejepa-vits16-pretrain-in1k) can therefore provide an initial way to explore time-series representations without first training a new encoder. This is a proxy for the research direction: it measures the transfer of an existing image model through a chosen representation, rather than directly evaluating a LeJEPA model pretrained on time series.
 
-The CWT provides a bridge between the time series and visual domains by representing the signal as a scalogram, where changes over time and frequency can be observed in an image. The choice of wavelet, frequency range, and window length determines which signal dynamics are presented to the visual encoder. This allows us to explore different representations without retraining the pretrained LeJEPA model, even though it was not originally trained on scalogram images.
+Previous work has considered CWT scalograms as a way to represent time-varying frequency information in images suitable for computer vision models. A [study using CWT scalograms](https://link.springer.com/article/10.1007/s10278-026-02417-w) highlights how this representation brings temporal and frequency information together, making it possible to process time series with image architectures.
+
+The CWT also allows different representations to be explored without retraining the pretrained LeJEPA model, even though it was not originally trained on scalogram images. Different wavelets can emphasize different patterns and may provide alternative views for future fine-tuning. The present comparison uses a fixed wavelet configuration and a trained downstream classifier, so it does not test wavelet augmentation or zero-shot classification. It can instead serve as an initial baseline against which future time-series LeJEPA models and transformation choices may be compared.
+
+### Physiological signals
+
+Physiological time series provide a setting for studying these representations because the same types of signals can support different tasks in clinical and wearable settings. The difficulty depends on the relationship between the signal and the task: a pattern may be distinguishable across participants for one outcome, while differences between participants make another outcome harder to estimate. This makes it possible to study representation learning across tasks with different requirements. For example, cognitive state estimation can be difficult because labels may rely on self-reports or experimental conditions, while physiological responses vary between participants. Public datasets cover tasks such as stress detection, engagement, and sleep stages, providing different settings in which to evaluate a model.
+
+In this research, we explore whether an image-pretrained LeJEPA model can extract useful representations from physiological time series converted into scalograms. We compare its representations with those from generalist and domain-specific time-series foundation models, beginning with stress classification. The comparison provides an initial baseline for possible future LeJEPA models designed directly for time series.
 
 ## Experiments
 
@@ -36,6 +47,8 @@ The chest ECG was originally sampled at 700 Hz and is downsampled to 256 Hz. For
 - **[LeJEPA ViT-S/16](https://huggingface.co/OK-AI/lejepa-vits16-pretrain-in1k) (complex Morlet, `cmor1.5-1.0`):** Each window is converted into a scalogram using the CWT with 100 frequencies between 1 and 65 Hz. The resulting image is passed to the encoder to obtain an embedding.
 
 **Evaluation Protocols**. We use leave-k--out (k = 3) cross validation through the participants. a logistic regression classifier is trained on embeddings from the remaining participants and evaluated separately for each held-out participant.
+
+The participant split tests transfer to participants excluded from the downstream classifier's training data. It does not by itself establish that the evaluation data were absent from the models' original pretraining corpora. [Research on time-series foundation model evaluation](https://arxiv.org/abs/2510.13654) highlights pretraining overlap and related forms of information leakage as risks for benchmarking; this is a consideration when interpreting results for pretrained checkpoints whose data provenance is not fully known.
 
 - **Linear probing:** The classifier is trained using all available training embeddings. We evaluate accuracy, balanced accuracy, macro F1, Matthews correlation coefficient, and AUROC for each participant.
 
@@ -78,3 +91,75 @@ Results are reported as mean ± sample standard deviation across the 15 particip
 | TS-JEPA | 0.749 ± 0.243 | 0.733 ± 0.234 | 0.675 ± 0.189 | 0.619 ± 0.132 |
 
 Scores vary substantially between participants, and these results are descriptive rather than evidence of statistical significance. They are limited to the selected dataset, preprocessing, and model checkpoints.
+
+Together, these experiments provide a baseline for further investigation rather than a direct test of a time-series LeJEPA pretraining objective. The models differ in architecture, pretraining data, objectives, and input representation, so this comparison cannot attribute the observed differences to any one of them. A future model trained directly on time series could be evaluated against this image-based LeJEPA baseline under matched downstream settings.
+
+## Appendix
+
+### Evaluation figures
+
+**Linear probing**
+
+<img src="assets/linear_probing_auroc.png" alt="Linear probing AUROC by model and participant" width="450">
+
+*Figure 1. Distribution of participant AUROC scores for linear probing across models.*
+
+**Data scarcity**
+
+<img src="assets/data_scarcity_auroc.png" alt="Mean data scarcity AUROC by model and training fraction" width="450">
+
+*Figure 2. Mean participant AUROC at each percentage of training data per class.*
+
+**Noise stress**
+
+<img src="assets/noise_stress_auroc.png" alt="Mean AUROC by model and noise level" width="450">
+
+*Figure 3. Mean participant AUROC for clean signals and each noise level.*
+
+### t-SNE visualizations
+
+<table>
+<tr>
+<td><img src="assets/tsne_chronos.png" alt="Chronos-T5 base t-SNE" width="320"></td>
+<td><img src="assets/tsne_moment.png" alt="MOMENT-1-large t-SNE" width="320"></td>
+<td><img src="assets/tsne_normwear.png" alt="NormWear t-SNE" width="320"></td>
+<td><img src="assets/tsne_tsjepa.png" alt="TS-JEPA t-SNE" width="320"></td>
+<td><img src="assets/tsne_lejepa_complex_morlet.png" alt="LeJEPA complex Morlet t-SNE" width="320"></td>
+</tr>
+</table>
+
+*Figure 4. t-SNE projections of embeddings for Chronos-T5 base, MOMENT-1-large, NormWear, TS-JEPA, and LeJEPA ViT-S/16 with complex Morlet, from left to right. Colors indicate the baseline and stress conditions.*
+
+### Wavelet visualizations
+
+<table>
+<tr>
+<td><img src="assets/wavelet_baseline_signal.png" alt="Baseline signal" width="250"></td>
+<td><img src="assets/wavelet_cmor_baseline_scalogram.png" alt="Complex Morlet baseline scalogram" width="250"></td>
+<td><img src="assets/wavelet_cmor_baseline_surface.png" alt="Complex Morlet baseline surface" width="250"></td>
+</tr>
+</table>
+
+*Figure 5. Baseline window: original signal, complex Morlet scalogram, and CWT magnitude surface, from left to right.*
+
+<table>
+<tr>
+<td><img src="assets/wavelet_tsst_signal.png" alt="TSST signal" width="250"></td>
+<td><img src="assets/wavelet_cmor_tsst_scalogram.png" alt="Complex Morlet TSST scalogram" width="250"></td>
+<td><img src="assets/wavelet_cmor_tsst_surface.png" alt="Complex Morlet TSST surface" width="250"></td>
+</tr>
+</table>
+
+*Figure 6. TSST window: original signal, complex Morlet scalogram, and CWT magnitude surface, from left to right.*
+
+Can different wavelets be used for data augmentation during fine-tuning? Different wavelets can emphasize different time-frequency patterns in the same signal, providing multiple views of each training window.
+
+<table>
+<tr>
+<td><img src="assets/wavelet_cmor_baseline_scalogram.png" alt="Complex Morlet baseline scalogram" width="250"></td>
+<td><img src="assets/wavelet_morl_baseline_scalogram.png" alt="Morlet baseline scalogram" width="250"></td>
+<td><img src="assets/wavelet_mexh_baseline_scalogram.png" alt="Mexican hat baseline scalogram" width="250"></td>
+</tr>
+</table>
+
+*Figure 7. Scalograms of the baseline window using complex Morlet, Morlet, and Mexican hat wavelets, from left to right.*
