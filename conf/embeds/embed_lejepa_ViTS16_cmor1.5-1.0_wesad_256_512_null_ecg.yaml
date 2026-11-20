@@ -1,5 +1,5 @@
 defaults:
-  - /models@model: lejepa_mexh
+  - /models@model: lejepa_ViTS16_cmor1.5-1.0
   - _self_
 
 dataset:

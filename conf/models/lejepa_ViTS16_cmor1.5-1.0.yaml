@@ -1,4 +1,4 @@
-name: lejepa
+name: lejepa_ViTS16_cmor1.5-1.0
 instance:
   _target_: fmlab.fms.lejepa.lejepa.LeJEPA
   model_id: OK-AI/lejepa-vits16-pretrain-in1k

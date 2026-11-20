@@ -1,8 +1,8 @@
 defaults:
-  - lejepa
+  - lejepa_ViTS16_cmor1.5-1.0
   - _self_
 
-name: lejepa_mexh
+name: lejepa_ViTS16_mexh
 instance:
   transforms:
     wavelet: mexh

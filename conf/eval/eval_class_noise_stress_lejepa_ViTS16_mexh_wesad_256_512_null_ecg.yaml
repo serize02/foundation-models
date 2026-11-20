@@ -1,8 +1,8 @@
 defaults:
   - eval_class_noise_stress
-  - /models@model: lejepa_morl
+  - /models@model: lejepa_ViTS16_mexh
   - _self_
 
 embeddings:
-  name: lejepa_morl_wesad_256_512_null_ecg
+  name: lejepa_ViTS16_mexh_wesad_256_512_null_ecg
   path: artifacts/embeddings/${.name}
