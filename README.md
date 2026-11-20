@@ -130,6 +130,17 @@ Together, these experiments provide a baseline for further investigation rather 
 
 *Figure 4. t-SNE projections of embeddings for Chronos-T5 base, MOMENT-1-large, NormWear, TS-JEPA, and LeJEPA ViT-S/16 with complex Morlet, from left to right. Colors indicate the baseline and stress conditions.*
 
+<table>
+<tr>
+<td><img src="assets/tsne_lejepa_complex_morlet.png" alt="LeJEPA complex Morlet t-SNE" width="320"></td>
+<td><img src="assets/tsne_lejepa_morl.png" alt="LeJEPA Morlet t-SNE" width="320"></td>
+<td><img src="assets/tsne_lejepa_mexh.png" alt="LeJEPA Mexican hat t-SNE" width="320"></td>
+<td><img src="assets/tsne_lejepa_gaus1.png" alt="LeJEPA gaus1 t-SNE" width="320"></td>
+</tr>
+</table>
+
+*t-SNE projections of LeJEPA embeddings using complex Morlet, Morlet, Mexican hat, and gaus1 wavelets, from left to right. Colors indicate the baseline and stress conditions.*
+
 ### Wavelet visualizations
 
 <table>
@@ -152,6 +163,10 @@ Together, these experiments provide a baseline for further investigation rather 
 
 *Figure 6. TSST window: original signal, complex Morlet scalogram, and CWT magnitude surface, from left to right.*
 
+<img src="assets/wavelet_mother_wavelets.png" alt="Complex Morlet, Morlet, Mexican hat, and gaus1 wavelets" width="900">
+
+*Mother wavelets: complex Morlet, Morlet, Mexican hat, and gaus1, from left to right.*
+
 Can different wavelets be used for data augmentation during fine-tuning? Different wavelets can emphasize different time-frequency patterns in the same signal, providing multiple views of each training window.
 
 <table>
@@ -159,7 +174,30 @@ Can different wavelets be used for data augmentation during fine-tuning? Differe
 <td><img src="assets/wavelet_cmor_baseline_scalogram.png" alt="Complex Morlet baseline scalogram" width="250"></td>
 <td><img src="assets/wavelet_morl_baseline_scalogram.png" alt="Morlet baseline scalogram" width="250"></td>
 <td><img src="assets/wavelet_mexh_baseline_scalogram.png" alt="Mexican hat baseline scalogram" width="250"></td>
+<td><img src="assets/wavelet_gaus1_baseline_scalogram.png" alt="Gaus1 baseline scalogram" width="250"></td>
 </tr>
 </table>
 
-*Figure 7. Scalograms of the baseline window using complex Morlet, Morlet, and Mexican hat wavelets, from left to right.*
+*Figure 7. Scalograms of the baseline window using complex Morlet, Morlet, Mexican hat, and gaus1 wavelets, from left to right.*
+
+<table>
+<tr>
+<td><img src="assets/wavelet_cmor_baseline_surface.png" alt="Complex Morlet baseline surface" width="250"></td>
+<td><img src="assets/wavelet_morl_baseline_surface.png" alt="Morlet baseline surface" width="250"></td>
+<td><img src="assets/wavelet_mexh_baseline_surface.png" alt="Mexican hat baseline surface" width="250"></td>
+<td><img src="assets/wavelet_gaus1_baseline_surface.png" alt="Gaus1 baseline surface" width="250"></td>
+</tr>
+</table>
+
+*CWT magnitude surfaces of the baseline window using complex Morlet, Morlet, Mexican hat, and gaus1 wavelets, from left to right.*
+
+<table>
+<tr>
+<td><img src="assets/wavelet_cmor_tsst_surface.png" alt="Complex Morlet TSST surface" width="250"></td>
+<td><img src="assets/wavelet_morl_tsst_surface.png" alt="Morlet TSST surface" width="250"></td>
+<td><img src="assets/wavelet_mexh_tsst_surface.png" alt="Mexican hat TSST surface" width="250"></td>
+<td><img src="assets/wavelet_gaus1_tsst_surface.png" alt="Gaus1 TSST surface" width="250"></td>
+</tr>
+</table>
+
+*CWT magnitude surfaces of the TSST window using complex Morlet, Morlet, Mexican hat, and gaus1 wavelets, from left to right.*
